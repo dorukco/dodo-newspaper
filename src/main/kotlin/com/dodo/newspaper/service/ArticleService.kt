@@ -4,7 +4,6 @@ import com.dodo.newspaper.domain.Article
 import com.dodo.newspaper.exception.ArticleNotFoundException
 import com.dodo.newspaper.exception.ArticleSearchException
 import com.dodo.newspaper.repository.ArticleRepository
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.time.Instant

@@ -114,7 +114,7 @@ class ArticleServiceTest {
     fun `get an article via keyword`() {
         `when`(articleRepository.getArticles("keyword")).thenReturn(listOf(article))
 
-        val returnedArticles = articleService.getArticles(keyword =  "keyword")
+        val returnedArticles = articleService.getArticles(keyword = "keyword")
 
         assertEquals(returnedArticles?.size, 1)
         verify(articleRepository).getArticles("keyword")

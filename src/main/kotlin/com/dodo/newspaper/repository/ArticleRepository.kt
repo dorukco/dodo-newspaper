@@ -12,7 +12,7 @@ interface ArticleRepository : JpaRepository<Article, Long> {
 
     @Query("SELECT ar FROM Author au JOIN au.articles ar WHERE au.firstName = :firstName and au.lastName = :lastName")
     fun getArticles(@Param("firstName") firstName: String?,
-                     @Param("lastName") lastName: String?): List<Article>?
+                    @Param("lastName") lastName: String?): List<Article>?
 
     @Query("SELECT ar FROM Keyword ke JOIN ke.articles ar WHERE ke.keyword = :keyword")
     fun getArticles(@Param("keyword") keyword: String?): List<Article>?

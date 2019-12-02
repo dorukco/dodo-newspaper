@@ -81,7 +81,7 @@ class ArticleControllerTest {
     @Test
     fun `upon an unknown update article request, http status 400 is returned`() {
         val updatedArticle = article.apply { keywords.add(Keyword(keyword = "keyword1")) }
-        doThrow(ArticleNotFoundException("error")).`when`(articleService).update(updatedArticle,1L)
+        doThrow(ArticleNotFoundException("error")).`when`(articleService).update(updatedArticle, 1L)
 
         mockMvc.perform(put("/article/1").content(objectMapper.writeValueAsString(updatedArticle))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))

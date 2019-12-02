@@ -11,7 +11,7 @@ import javax.persistence.Table
 
 @Entity
 @Table(name = "keyword")
-data class Keyword (
+data class Keyword(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @JsonIgnore
@@ -20,7 +20,7 @@ data class Keyword (
         @Column(name = "keyword", nullable = false)
         val keyword: String
 ) {
-        @JsonIgnore
-        @ManyToMany(mappedBy = "keywords")
-        val articles: MutableSet<Article> = mutableSetOf()
+    @JsonIgnore
+    @ManyToMany(mappedBy = "keywords")
+    val articles: MutableSet<Article> = mutableSetOf()
 }

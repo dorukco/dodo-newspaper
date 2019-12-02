@@ -23,7 +23,7 @@ data class Author(
         @Column(name = "last_name", nullable = false)
         val lastName: String
 ) {
-        @JsonIgnore
-        @ManyToMany(mappedBy = "authors")
-        val articles: MutableSet<Article> = mutableSetOf()
+    @JsonIgnore
+    @ManyToMany(mappedBy = "authors")
+    val articles: MutableSet<Article> = mutableSetOf()
 }

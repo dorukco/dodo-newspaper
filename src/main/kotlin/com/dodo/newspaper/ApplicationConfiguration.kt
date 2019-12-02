@@ -7,20 +7,14 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.afterburner.AfterburnerModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import com.google.common.collect.ImmutableList
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.core.annotation.Order
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
-import springfox.documentation.service.ApiDescription
 import springfox.documentation.service.ApiInfo
 import springfox.documentation.service.Contact
 import springfox.documentation.spi.DocumentationType
-import springfox.documentation.spi.service.ApiListingBuilderPlugin
-import springfox.documentation.spi.service.contexts.ApiListingContext
 import springfox.documentation.spring.web.plugins.Docket
-import springfox.documentation.swagger.common.SwaggerPluginSupport
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 
