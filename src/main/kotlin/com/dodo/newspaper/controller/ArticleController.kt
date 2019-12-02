@@ -50,28 +50,17 @@ class ArticleController(private val articleService: ArticleService) {
     fun getArticle(
             @PathVariable("Article-Id") articleId: Long) = articleService.getArticle(articleId)
 
-    @ApiOperation(value = "Get newspaper articles for given author name")
+    @ApiOperation(value = "Get newspaper articles for given query parameters")
     @RequestMapping(method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE], params = ["firstName", "lastName"])
+            produces = [MediaType.APPLICATION_JSON_VALUE])
     @ResponseStatus(HttpStatus.OK)
     fun getArticles(
-            @RequestParam("firstName") firstName: String,
-            @RequestParam("lastName") lastName: String) = articleService.getArticles(firstName, lastName)
-
-    @ApiOperation(value = "Get newspaper articles for given keyword")
-    @RequestMapping(method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE], params = ["keyword"])
-    @ResponseStatus(HttpStatus.OK)
-    fun getArticles(
-            @RequestParam("keyword") keyword: String) = articleService.getArticles(keyword)
-
-    @ApiOperation(value = "Get newspaper articles for given period")
-    @RequestMapping(method = [RequestMethod.GET],
-            produces = [MediaType.APPLICATION_JSON_VALUE], params = ["from", "to"])
-    @ResponseStatus(HttpStatus.OK)
-    fun getArticles(
-            @RequestParam("from") from: Instant,
-            @RequestParam("to") to: Instant) = articleService.getArticles(from, to)
+            @RequestParam("firstName", required = false) firstName: String?,
+            @RequestParam("lastName", required = false) lastName: String?,
+            @RequestParam("keyword", required = false) keyword: String?,
+            @RequestParam("from", required = false) from: Instant?,
+            @RequestParam("to", required = false) to: Instant?
+    ) = articleService.getArticles(firstName, lastName, keyword, from, to)
 
     companion object {
         const val BASE_URL = "article"

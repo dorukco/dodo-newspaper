@@ -2,6 +2,7 @@ package com.dodo.newspaper.service
 
 import com.dodo.newspaper.domain.Article
 import com.dodo.newspaper.exception.ArticleNotFoundException
+import com.dodo.newspaper.exception.ArticleSearchException
 import com.dodo.newspaper.repository.ArticleRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -18,7 +19,7 @@ class ArticleService(private val articleRepository: ArticleRepository) {
 
     @Transactional
     fun update(article: Article, articleId: Long) {
-        findArticle(articleId).also {
+        getArticle(articleId).also {
             articleRepository.save(article.apply {
                 id = articleId
             })
@@ -27,30 +28,26 @@ class ArticleService(private val articleRepository: ArticleRepository) {
 
     @Transactional
     fun deleteArticle(articleId: Long) {
-        findArticle(articleId).also {
+        getArticle(articleId).also {
             articleRepository.deleteById(articleId)
         }
     }
 
     fun getArticle(articleId: Long): Article? {
-        return findArticle(articleId)
-    }
-
-    fun getArticles(firstName: String, lastName: String): List<Article>? {
-        return articleRepository.getArticles(firstName, lastName)
-    }
-
-    fun getArticles(keyword: String): List<Article>? {
-        return articleRepository.getArticles(keyword)
-    }
-
-    fun getArticles(from: Instant, to: Instant): List<Article>? {
-        return articleRepository.getArticles(from, to)
-    }
-
-    private fun findArticle(articleId: Long): Article? {
-        return articleRepository.findByIdOrNull(articleId)
+        return articleRepository.findFirstById(articleId)
                 ?: throw ArticleNotFoundException("Article with id $articleId cannot be found.")
     }
 
+    fun getArticles(firstName: String? = null, lastName: String? = null, keyword: String? = null,
+                    from: Instant? = null, to: Instant? = null): List<Article>? {
+        return if (!firstName.isNullOrEmpty() && !lastName.isNullOrEmpty()) {
+            articleRepository.getArticles(firstName, lastName)
+        } else if (!keyword.isNullOrEmpty()) {
+            articleRepository.getArticles(keyword)
+        } else if (from != null && to != null) {
+            articleRepository.getArticles(from, to)
+        } else {
+            throw ArticleSearchException("Parameter conditions 'keyword' OR 'firstName', 'lastName' OR 'from', 'to' do not meet for actual request parameters.")
+        }
+    }
 }

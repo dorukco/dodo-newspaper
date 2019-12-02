@@ -25,5 +25,5 @@ data class Author(
 ) {
         @JsonIgnore
         @ManyToMany(mappedBy = "authors")
-        val articles: Set<Article>? = null
+        val articles: MutableSet<Article> = mutableSetOf()
 }

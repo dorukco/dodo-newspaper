@@ -11,13 +11,15 @@ import java.time.Instant
 interface ArticleRepository : JpaRepository<Article, Long> {
 
     @Query("SELECT ar FROM Author au JOIN au.articles ar WHERE au.firstName = :firstName and au.lastName = :lastName")
-    fun getArticles(@Param("firstName") firstName: String,
-                     @Param("lastName") lastName: String): List<Article>?
+    fun getArticles(@Param("firstName") firstName: String?,
+                     @Param("lastName") lastName: String?): List<Article>?
 
     @Query("SELECT ar FROM Keyword ke JOIN ke.articles ar WHERE ke.keyword = :keyword")
-    fun getArticles(@Param("keyword") keyword: String): List<Article>?
+    fun getArticles(@Param("keyword") keyword: String?): List<Article>?
 
     @Query("SELECT ar FROM Article ar WHERE (ar.publishDate >= :from) AND (ar.publishDate <= :to)")
-    fun getArticles(@Param("from") from: Instant,
-                    @Param("to") to: Instant): List<Article>?
+    fun getArticles(@Param("from") from: Instant?,
+                    @Param("to") to: Instant?): List<Article>?
+
+    fun findFirstById(id: Long): Article?
 }

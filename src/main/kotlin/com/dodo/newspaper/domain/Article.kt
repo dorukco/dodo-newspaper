@@ -37,7 +37,6 @@ data class Article(
         val text: String,
 
         @Column(name = "publish_date", nullable = false)
-        @JsonProperty(access = JsonProperty.Access.READ_ONLY)
         val publishDate: Instant = Instant.now()
 ) {
     @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
@@ -46,7 +45,7 @@ data class Article(
             joinColumns = [JoinColumn(name = "article_id", referencedColumnName = "id")],
             inverseJoinColumns = [JoinColumn(name = "author_id", referencedColumnName = "id")]
     )
-    val authors: Set<Author>? = null
+    val authors: MutableSet<Author> = mutableSetOf()
 
     @ManyToMany(cascade = [CascadeType.PERSIST, CascadeType.MERGE])
     @JoinTable(
@@ -54,5 +53,5 @@ data class Article(
             joinColumns = [JoinColumn(name = "article_id", referencedColumnName = "id")],
             inverseJoinColumns = [JoinColumn(name = "keyword_id", referencedColumnName = "id")]
     )
-    val keywords: Set<Keyword>? = null
+    val keywords: MutableSet<Keyword> = mutableSetOf()
 }

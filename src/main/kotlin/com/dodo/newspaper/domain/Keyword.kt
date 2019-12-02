@@ -22,5 +22,5 @@ data class Keyword (
 ) {
         @JsonIgnore
         @ManyToMany(mappedBy = "keywords")
-        val articles: Set<Article>? = null
+        val articles: MutableSet<Article> = mutableSetOf()
 }
