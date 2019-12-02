@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.mockito.Mockito.doNothing
 import org.mockito.Mockito.doThrow
+import org.mockito.Mockito.verify
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -55,6 +56,8 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated)
                 .andReturn()
+
+        verify(articleService).create(article)
     }
 
     @Test
@@ -65,6 +68,8 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andExpect(content().string(objectMapper.writeValueAsString(article)))
+
+        verify(articleService).getArticle(1L)
     }
 
     @Test
@@ -76,6 +81,8 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isNoContent)
                 .andReturn()
+
+        verify(articleService).update(updatedArticle, 1L)
     }
 
     @Test
@@ -87,6 +94,8 @@ class ArticleControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest)
                 .andReturn()
+
+        verify(articleService).update(updatedArticle, 1L)
     }
 
     @Test
@@ -96,6 +105,8 @@ class ArticleControllerTest {
         mockMvc.perform(delete("/article/1"))
                 .andExpect(status().isNoContent)
                 .andReturn()
+
+        verify(articleService).deleteArticle(1L)
     }
 
     @Test
@@ -105,6 +116,8 @@ class ArticleControllerTest {
         mockMvc.perform(delete("/article/1"))
                 .andExpect(status().isBadRequest)
                 .andReturn()
+
+        verify(articleService).deleteArticle(1L)
     }
 
     @Test
@@ -114,6 +127,8 @@ class ArticleControllerTest {
         mockMvc.perform(get("/article?firstName=firstname&lastName=lastname").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andExpect(content().string(objectMapper.writeValueAsString(listOf(article))))
+
+        verify(articleService).getArticles(firstName = "firstname", lastName = "lastname")
     }
 
     @Test
@@ -123,6 +138,8 @@ class ArticleControllerTest {
         mockMvc.perform(get("/article?keyword=keyword").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andExpect(content().string(objectMapper.writeValueAsString(listOf(article))))
+
+        verify(articleService).getArticles(keyword = "keyword")
     }
 
     @Test
@@ -134,13 +151,17 @@ class ArticleControllerTest {
         mockMvc.perform(get("/article?from=$from&to=$to").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isOk)
                 .andExpect(content().string(objectMapper.writeValueAsString(listOf(article))))
+
+        verify(articleService).getArticles(from = from, to = to)
     }
 
     @Test
     fun `upon a get article request via missing parameters, http status 400 is returned`() {
-        `when`(articleService.getArticles(firstName = "firstname", keyword = "keyword")).thenThrow(ArticleSearchException("error"))
+        `when`(articleService.getArticles(firstName = "firstname")).thenThrow(ArticleSearchException("error"))
 
-        mockMvc.perform(get("/article?firstName=firstname&keyword=keyword").accept(MediaType.APPLICATION_JSON_VALUE))
+        mockMvc.perform(get("/article?firstName=firstname").accept(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest)
+
+        verify(articleService).getArticles(firstName = "firstname")
     }
 }
